@@ -44,7 +44,6 @@ class WebClientTest {
 	}
 	
 	@Test
-	@Disabled("이것은 시험의 골격이다. 따라서, 실행하면, 실패할 것이다.")
 	void testGetContentOk() throws MalformedURLException {
 		WebClient client = new WebClient();
 		String url = "http://localhost:8081/testGetContentOk";
