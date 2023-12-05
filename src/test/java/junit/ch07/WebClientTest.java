@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.io.IOException;
 import java.io.OutputStream;
+import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URL;
 
@@ -44,11 +45,11 @@ class WebClientTest {
 	}
 	
 	@Test
-	void testGetContentOk() throws MalformedURLException {
+	void testGetContentOk() 
+			throws MalformedURLException, UnsupportedEncodingException {
 		WebClient client = new WebClient();
 		String url = "http://localhost:8081/testGetContentOk";
 		String workingContent = client.getContent(new URL(url));
-		
 		assertEquals("제티 작동함", workingContent);
 	}
 	
@@ -58,12 +59,11 @@ class WebClientTest {
 		public void handle(String target, HttpServletRequest request,
 				HttpServletResponse response, int dispatch)
 				throws IOException, ServletException {
-			try (OutputStream out = response.getOutputStream();
-					ByteArrayISO8859Writer writer = new ByteArrayISO8859Writer()) {
-				writer.write("제티 작동함");
+			try (OutputStream out = response.getOutputStream()) {
+				byte[] bytes = "제티 작동함".getBytes("UTF-8");
 				response.setIntHeader(HttpHeaders.CONTENT_LENGTH,
-						writer.size());
-				writer.writeTo(out);
+						bytes.length);
+				out.write(bytes);				
 			} 			
 		}
 	}
